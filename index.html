@@ -270,13 +270,13 @@
         function calculateTotal() {
             let grandTotal = 0;
             
-            Object.entries(items).forEach(([name, value]) => {
+            Object.entries(items).forEach(([name, itemData]) => {
                 const cardId = name.replace(/\s+/g, '').toLowerCase();
                 const input = document.getElementById(cardId);
                 const totalElement = document.getElementById(cardId + '-total');
                 
                 const quantity = parseInt(input.value) || 0;
-                const itemTotal = quantity * value;
+                const itemTotal = quantity * itemData.value; // Fixed: use itemData.value instead of value
                 
                 totalElement.textContent = `Total: ${itemTotal.toLocaleString()}`;
                 grandTotal += itemTotal;
