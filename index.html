@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Value Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(40, 40, 40, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #4a4a4a, #666);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 2px solid #555;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .header p {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+
+        .calculator {
+            padding: 30px;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .item-card {
+            background: rgba(60, 60, 60, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #555;
+            transition: all 0.3s ease;
+        }
+
+        .item-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-color: #777;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .item-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .item-value {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group label {
+            min-width: 80px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .quantity-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            background: rgba(30, 30, 30, 0.8);
+            color: #fff;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .quantity-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .item-total {
+            text-align: right;
+            font-weight: bold;
+            color: #4CAF50;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .total-section {
+            background: linear-gradient(45deg, #333, #444);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 2px solid #555;
+        }
+
+        .grand-total {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4CAF50;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .clear-button {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .clear-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                margin: 10px;
+            }
+        }
+
+        .small{
+            color:#747272;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍀 Item Value Calculator</h1>
+            <p>Calculate your total earnings from collected items</p>
+        </div>
+        
+        <div class="calculator">
+            <div class="items-grid" id="itemsGrid">
+                <!-- Items will be populated by JavaScript -->
+            </div>
+            
+            <div class="total-section">
+                <div class="small">This is a rough amount and is not the exact amount you will get from selling all your things and those numbers are in the range of the item you can get</div>
+                <div class="grand-total" id="grandTotal">Total: 0</div>
+                <button class="clear-button" onclick="clearAll()">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const items = {
+            "4 Leaf Clover": 276,
+            "Caterpillar": 283,
+            "Small Frog": 246,
+            "Seashell": 234,
+            "Lucky Penny": 264,
+            "Feather": 528,
+            "Bottle Cap": 574,
+            "Small Frog MK2": 822,
+            "4 Leaf Clover MK2": 914,
+            "Ladybug": 927,
+            "Small Crab": 815
+        };
+
+        function createItemCard(itemName, itemValue) {
+            const cardId = itemName.replace(/\s+/g, '').toLowerCase();
+            return `
+                <div class="item-card">
+                    <div class="item-header">
+                        <span class="item-name">${itemName}</span>
+                        <span class="item-value">${itemValue}</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="${cardId}">Quantity:</label>
+                        <input type="number" 
+                               id="${cardId}" 
+                               class="quantity-input" 
+                               min="0" 
+                               value="0" 
+                               oninput="calculateTotal()"
+                               placeholder="0">
+                    </div>
+                    <div class="item-total" id="${cardId}-total">Total: 0</div>
+                </div>
+            `;
+        }
+
+        function initializeItems() {
+            const grid = document.getElementById('itemsGrid');
+            grid.innerHTML = '';
+            
+            Object.entries(items).forEach(([name, value]) => {
+                grid.innerHTML += createItemCard(name, value);
+            });
+        }
+
+        function calculateTotal() {
+            let grandTotal = 0;
+            
+            Object.entries(items).forEach(([name, value]) => {
+                const cardId = name.replace(/\s+/g, '').toLowerCase();
+                const input = document.getElementById(cardId);
+                const totalElement = document.getElementById(cardId + '-total');
+                
+                const quantity = parseInt(input.value) || 0;
+                const itemTotal = quantity * value;
+                
+                totalElement.textContent = `Total: ${itemTotal.toLocaleString()}`;
+                grandTotal += itemTotal;
+            });
+            
+            document.getElementById('grandTotal').textContent = `Total: ${grandTotal.toLocaleString()}`;
+        }
+
+        function clearAll() {
+            Object.keys(items).forEach(name => {
+                const cardId = name.replace(/\s+/g, '').toLowerCase();
+                const input = document.getElementById(cardId);
+                input.value = 0;
+            });
+            calculateTotal();
+        }
+
+        // Initialize the calculator when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeItems();
+            calculateTotal();
+        });
+    </script>
+</body>
+</html>
