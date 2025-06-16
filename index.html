@@ -181,6 +181,19 @@
             color:#747272;
             font-size: 1rem;
         }
+
+        .cap-badge {
+            position: relative;
+            background: #444;
+            color: #ffcc00;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 10px;
+            box-shadow: 0 0 5px rgba(255, 204, 0, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -205,30 +218,31 @@
 
     <script>
         const items = {
-            "4 Leaf Clover": 276,
-            "Caterpillar": 283,
-            "Small Frog": 246,
-            "Seashell": 234,
-            "Lucky Penny": 264,
-            "Ball Bearing": 313,
-            "Lego Brick": 240,
-            "Feather": 528,
-            "Bottle Cap": 574,
-            "Small Frog MK2": 822,
-            "4 Leaf Clover MK2": 914,
-            "Ladybug": 927,
-            "Small Crab": 815,
-            "Pretty Marble": 865
+            "4 Leaf Clover": { value: 276, cap: 16 },
+            "Caterpillar": { value: 283, cap: 16 },
+            "Small Frog": { value: 246, cap: 16 },
+            "Seashell": { value: 234, cap: 16 },
+            "Lucky Penny": { value: 264, cap: 16 },
+            "Ball Bearing": { value: 313, cap: 16 },
+            "Lego Brick": { value: 240, cap: 16 },
+            "Feather": { value: 528, cap: 12 },
+            "Bottle Cap": { value: 574, cap: 12 },
+            "Small Frog MK2": { value: 822, cap: 8 },
+            "4 Leaf Clover MK2": { value: 914, cap: 8 },
+            "Ladybug": { value: 927, cap: 8 },
+            "Small Crab": { value: 815, cap: 8 },
+            "Pretty Marble": { value: 865, cap: 8 }
         };
 
-        function createItemCard(itemName, itemValue) {
+        function createItemCard(itemName, itemData) {
             const cardId = itemName.replace(/\s+/g, '').toLowerCase();
             return `
                 <div class="item-card">
                     <div class="item-header">
                         <span class="item-name">${itemName}</span>
-                        <span class="item-value">${itemValue}</span>
+                        <span class="item-value">${itemData.value}</span>
                     </div>
+                    <div class="cap-badge">Cap: ${itemData.cap}/day</div>
                     <div class="input-group">
                         <label for="${cardId}">Quantity:</label>
                         <input type="number" 
@@ -248,8 +262,8 @@
             const grid = document.getElementById('itemsGrid');
             grid.innerHTML = '';
             
-            Object.entries(items).forEach(([name, value]) => {
-                grid.innerHTML += createItemCard(name, value);
+            Object.entries(items).forEach(([name, data]) => {
+                grid.innerHTML += createItemCard(name, data);
             });
         }
 
