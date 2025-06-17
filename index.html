@@ -210,7 +210,7 @@
             
             <div class="total-section">
                 <div class="small">This is a rough amount and is not the exact amount you will get from selling all your things and those numbers are in the range of the item you can get</div>
-                <div class="grand-total" id="grandTotal">Total: 0</div>
+                <div class="grand-total" id="grandTotal">Total: $0</div>
                 <button class="clear-button" onclick="clearAll()">Clear All</button>
             </div>
         </div>
@@ -253,7 +253,7 @@
                                oninput="calculateTotal()"
                                placeholder="0">
                     </div>
-                    <div class="item-total" id="${cardId}-total">Total: 0</div>
+                    <div class="item-total" id="${cardId}-total">Total: $0</div>
                 </div>
             `;
         }
@@ -278,11 +278,11 @@
                 const quantity = parseInt(input.value) || 0;
                 const itemTotal = quantity * itemData.value; // Fixed: use itemData.value instead of value
                 
-                totalElement.textContent = `Total: ${itemTotal.toLocaleString()}`;
+                totalElement.textContent = `Total: $${itemTotal.toLocaleString()}`;
                 grandTotal += itemTotal;
             });
             
-            document.getElementById('grandTotal').textContent = `Total: ${grandTotal.toLocaleString()}`;
+            document.getElementById('grandTotal').textContent = `Total: $${grandTotal.toLocaleString()}`;
         }
 
         function clearAll() {
